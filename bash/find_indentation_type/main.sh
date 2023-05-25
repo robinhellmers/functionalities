@@ -1,24 +1,3 @@
-#!/bin/bash
-
-main()
-{
-    test_files_location="test_files"
-
-    test_files=()
-    test_files+=("$test_files_location/example_1")
-    test_files+=("$test_files_location/example_2")
-    test_files+=("$test_files_location/example_3")
-
-    for file in "${test_files[@]}"
-    do
-        echo ""
-        echo "Testing functionalities on the file: $file"
-
-        find_indent "$file"
-    done
-    echo ""
-}
-
 # Function to find the most common indentation type
 find_indent_type()
 {
@@ -59,7 +38,3 @@ find_indent()
         echo "Indentation size: $indent_size"
     fi
 }
-
-### Call main() ###
-main "$@"
-###################
