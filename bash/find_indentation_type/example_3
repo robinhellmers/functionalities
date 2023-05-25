@@ -1,0 +1,13 @@
+This line is not indented.
+    This line is indented with 4 spaces.
+        This line is indented with 8 spaces.
+            This line is indented with 12 spaces.
+	This line is indented with 1 tab.
+		This line is indented with 2 tabs.
+			This line is indented with 3 tabs.
+    This line is indented with 4 spaces again.
+	This line is indented with 1 tab again.
+    This line is also indented with 4 spaces.
+			This line is indented with 3 tabs.
+			This line is indented with 3 tabs.
+			This line is indented with 3 tabs.
