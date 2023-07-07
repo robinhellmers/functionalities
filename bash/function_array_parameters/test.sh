@@ -9,6 +9,21 @@ main()
     array_three=("Gummy bears" "Skittles" "Snickers")
     array_four=(5 4 3)
     array_five=("Indigo" "Khaki" "Forest green")
+
+    echo "****************************"
+    echo "***** Test iteration 1 *****"
+    echo "****************************"
+    test_function \
+        "${#array_one[@]}" "${array_one[@]}" \
+        "${#array_two[@]}" "${array_two[@]}" \
+        "${#array_three[@]}" "${array_three[@]}" \
+        "${#array_four[@]}" "${array_four[@]}" \
+        "${#array_five[@]}" "${array_five[@]}"
+    
+    echo -e "\n"
+    echo "****************************"
+    echo "***** Test iteration 2 *****"
+    echo "****************************"
     test_function \
         "${#array_one[@]}" "${array_one[@]}" \
         "${#array_two[@]}" "${array_two[@]}" \
@@ -35,11 +50,13 @@ test_function()
     local flower_names=("${dynamic_array[@]}")
 
     # Get each element one by one, by echo
+    local candy_names=()
     candy_names+=("$(get_dynamic_element "${dynamic_array_prefix}3" 0)")
     candy_names+=("$(get_dynamic_element "${dynamic_array_prefix}3" 1)")
     candy_names+=("$(get_dynamic_element "${dynamic_array_prefix}3" 2)")
 
     # Get each element one by one, through variable created
+    local numbers=()
     get_dynamic_element "${dynamic_array_prefix}4" 0 > /dev/null
     numbers+=("$dynamic_array_element")
     get_dynamic_element "${dynamic_array_prefix}4" 1 > /dev/null
@@ -48,6 +65,7 @@ test_function()
     numbers+=("$dynamic_array_element")
 
     # Get length and loop
+    local color_names=()
     get_dynamic_array_len "${dynamic_array_prefix}5" > /dev/null
     color_names_len="$dynamic_array_len"
     for (( i=0; i < color_names_len; i++ ))
