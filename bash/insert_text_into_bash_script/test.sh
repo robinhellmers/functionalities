@@ -4,7 +4,7 @@
 source insert_text.sh
 
 # Specify file to insert text into
-file="advanced_script.sh"
+file="test_files/advanced_script.sh"
 
 # Insert text at different relevant and challenging places in the file
 read -r -d '' text << EOM
