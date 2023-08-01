@@ -1,0 +1,6 @@
+"date" "download time" "status" "info"
+"2023-08-01 10:34:03 UTC+0200" "30" "SUCCESS" "Operation was successful"
+"2023-08-01 10:44:03 UTC+0200" "50" "SUCCESS" "Operation was successful"
+"2023-08-01 10:54:03 UTC+0200" "45" "SUCCESS" "Operation was successful"
+"2023-08-01 10:55:03 UTC+0200" "43" "FAILURE" "Operation was a failure"
+"2023-08-01 10:59:03 UTC+0200" "52" "SUCCESS" "Operation was successful"
