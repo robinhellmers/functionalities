@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
 
-readonly SOURCEABLE_SCRIPT='false'
+sourceable_script='false'
 
-if [[ "$SOURCEABLE_SCRIPT" == 'true' && ! "${BASH_SOURCE[0]}" -ef "$0" ]]
+if [[ "$sourceable_script" != 'true' && ! "${BASH_SOURCE[0]}" -ef "$0" ]]
 then
-    if ! [[ "${BASH_SOURCE[0]}" -ef "$0" ]]
-    then
-        echo "Do not source this script! Execute it with bash instead."
-        return 1
-    fi
+    echo "Do not source this script! Execute it with bash instead."
+    return 1
 fi
-unset SOURCEABLE_SCRIPT
+unset sourceable_script
 
 ########################
 ### Library sourcing ###
