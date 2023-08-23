@@ -26,3 +26,38 @@ guard_source_max_once || return
 ### Library start ###
 #####################
 
+invalid_function_usage()
+{
+    local function_usage="$1"
+    local error_info="$2"
+
+    # Function index 1 represents the function call before this function
+    local index=1
+
+    local func_name="${FUNCNAME[index]}"
+    local func_call_file="${BASH_SOURCE[index+1]}"
+    local func_call_line_num="${BASH_LINENO[index]}"
+
+    local wrapper='###################################################'
+    local divider='---------------------------------------------------'
+
+    cat >&2 <<END_OF_VARIABLE_WITH_EVAL
+
+${wrapper}
+!! Invalid usage of ${func_name}()
+
+Called from:
+${func_call_line_num}: ${func_call_file}
+
+${divider}
+Error info:
+
+${error_info}
+
+${divider}
+Usage info:
+
+${function_usage}
+${wrapper}
+END_OF_VARIABLE_WITH_EVAL
+}
