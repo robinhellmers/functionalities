@@ -13,17 +13,11 @@ daemonize_script()
         [[ "$arg" != "--daemon" ]] && local other_args+=( "$arg" )
     done
 
-    echo "daemon_script: $daemon_script"
-    echo "other_args: ${other_args[@]}"
-    echo "log_file_stdout: $log_file_stdout"
+    local piping=""
+    [[ -f "$log_file_stdout" ]] && piping=">$log_file_stdout 2>&1"
 
     # Run script as background job
-    if [[ -f "$log_file_stdout" ]]
-    then
-        "$daemon_script" "${other_args[@]}" </dev/null >"$log_file_stdout" 2>&1 &
-    else
-        "$daemon_script" "${other_args[@]}" </dev/null &
-    fi
+    "$daemon_script" "${other_args[@]}" </dev/null "$piping" &
     local process_id=$!
 
     # Create file indicating daemon process id
