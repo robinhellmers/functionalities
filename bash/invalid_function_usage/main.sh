@@ -21,10 +21,10 @@ library_sourcing()
     local -r THIS_SCRIPT_PATH="$(find_script_path)"
 
     # Store $THIS_SCRIPT_PATH as unique or local variables
-    # E.g. local -r LIB_PATH="$THIS_SCRIPT_PATH/lib"
+    local -r LIB_PATH="$THIS_SCRIPT_PATH/lib"
 
     ### Source libraries ###
-
+    source "$LIB_PATH/lib.bash"
 }
 
 # Only store output in multi-file unique readonly global variables or
@@ -55,11 +55,38 @@ library_sourcing
 ############
 main()
 {
-    :
+    first_func "Hey"
+    first_func "Hay"
 }
 ###################
 ### END OF MAIN ###
 ###################
+
+first_func()
+{
+    local input="$1"
+
+    second_func "$input"
+}
+
+second_func()
+{
+    local input="$1"
+
+    local valid_inputs=('Hi' 'Hey')
+    local is_valid='false'
+    for valid_input in "${valid_inputs[@]}"
+    do
+        [[ "$input" == "$valid_input" ]] && is_valid='true'
+    done
+
+    if [[ "$is_valid" == 'true' ]]
+    then
+        echo "$input"
+    else
+        echo "Invalid input."
+    fi
+}
 
 #################
 ### Call main ###
