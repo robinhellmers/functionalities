@@ -26,6 +26,24 @@ guard_source_max_once || return
 ### Library start ###
 #####################
 
+# For multiline variable definition
+#
+# Example without evaluation:
+# define my_var <<'END_OF_MESSAGE_WITHOUT_EVAL'
+# First line
+# Second line $var
+# END_OF_MESSAGE_WITHOUT_EVAL
+#
+# Example with evaluation:
+# define my_var <<END_OF_MESSAGE_WITH_EVAL
+# First line
+# Second line $var
+# END_OF_MESSAGE_WITH_EVAL
+define()
+{
+    IFS='\n' read -r -d '' ${1} || true
+}
+
 invalid_function_usage()
 {
     local function_usage="$1"

@@ -73,6 +73,14 @@ second_func()
 {
     local input="$1"
 
+    local function_usage
+    define function_usage <<'END_OF_MESSAGE'
+Usage: second_func <phrase>
+    <phrase>:
+        - 'Hi'
+        - 'Hey'
+END_OF_MESSAGE
+
     local valid_inputs=('Hi' 'Hey')
     local is_valid='false'
     for valid_input in "${valid_inputs[@]}"
@@ -84,7 +92,8 @@ second_func()
     then
         echo "$input"
     else
-        echo "Invalid input."
+        invalid_function_usage "$function_usage" \
+                               "Invalid input phrase: '$input'"
     fi
 }
 
