@@ -44,6 +44,19 @@ define()
     IFS='\n' read -r -d '' ${1} || true
 }
 
+get_func_def_line_num()
+{
+    local func_name=$1
+    local script_file=$2
+
+    local output_num
+
+    output_num=$(grep -c "^[\s]*${func_name}()" $script_file)
+    (( output_num == 1 )) || { echo '?'; return 1; }
+
+    grep -n "^[\s]*${func_name}()" $script_file | cut -d: -f1
+}
+
 invalid_function_usage()
 {
     local function_usage="$1"
@@ -55,6 +68,8 @@ invalid_function_usage()
     local func_name="${FUNCNAME[index]}"
     local func_call_file="${BASH_SOURCE[index+1]}"
     local func_call_line_num="${BASH_LINENO[index]}"
+    local func_def_file="${BASH_SOURCE[index]}"
+    local func_def_line_num="$(get_func_def_line_num $func_name $func_def_file)"
 
     local wrapper='###################################################'
     local divider='---------------------------------------------------'
@@ -66,6 +81,8 @@ ${wrapper}
 
 Called from:
 ${func_call_line_num}: ${func_call_file}
+Defined at:
+${func_def_line_num}: ${func_def_file}
 
 ${divider}
 Error info:
