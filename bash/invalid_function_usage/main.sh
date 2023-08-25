@@ -57,6 +57,9 @@ main()
 {
     first_func "Hey"
     first_func "Hay"
+
+    echo -e "\nLets call invalid_function_usage() with invalid arguments."
+    invalid_function_usage 'asd'
 }
 ###################
 ### END OF MAIN ###

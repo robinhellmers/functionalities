@@ -64,6 +64,36 @@ invalid_function_usage()
 
     # Function index 1 represents the function call before this function
     local index=1
+    if [[ -z "$function_usage"  || -z "$error_info" ]]
+    then
+        # Usage error of this function
+        index=0
+        input_error_this_func='true'
+
+        error_info="None or only one argument was entered."
+
+        define function_usage <<'END_OF_VARIABLE_WITHOUT_EVAL'
+Usage: invalid_function_usage <function_usage> <error_info>
+    <function_usage>:
+        - Multi-line description on how to use the function, create multi-line
+          variable using define() and pass that variable to the function.
+            * Example:
+
+              define function_usage <<'END_OF_VARIABLE'
+              Usage: "Function name" <arg1> <arg2>
+                  <arg1>:
+                      - "arg1 option 1" / "arg1 description"
+                  <arg2>:
+                      - "arg2 option 1"
+                      - "arg2 option 2"
+              END_OF_VARIABLE
+
+    <error_info>:
+        - Single-/Multi-line with extra info.
+            * Example:
+              "Invalid input <arg2>: '$arg_two'"
+END_OF_VARIABLE_WITHOUT_EVAL
+    fi
 
     local func_name="${FUNCNAME[index]}"
     local func_call_file="${BASH_SOURCE[index+1]}"
