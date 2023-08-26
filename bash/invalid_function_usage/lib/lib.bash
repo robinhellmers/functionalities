@@ -101,13 +101,18 @@ END_OF_VARIABLE_WITHOUT_EVAL
     local func_def_file="${BASH_SOURCE[index]}"
     local func_def_line_num="$(get_func_def_line_num $func_name $func_def_file)"
 
-    local wrapper='###################################################'
-    local divider='---------------------------------------------------'
+    eval $(resize) # Update COLUMNS regardless if shopt checkwinsize is enabled
+    local wrapper="$(printf "%.s#" $(seq $COLUMNS))"
+    local divider="$(printf "%.s-" $(seq $COLUMNS))"
+    local wrapper_start=$(printf "$wrapper\n##")
+    local wrapper_end=$(printf "##\n$wrapper")
+
+    # Remove potential last whitespace line
+    function_usage=$(sed '${/^[[:space:]]*$/d;}' <<< ${function_usage})
 
     cat >&2 <<END_OF_VARIABLE_WITH_EVAL
 
-${wrapper}
-!! Invalid usage of ${func_name}()
+${wrapper_start} !! Invalid usage of ${func_name}()
 
 Called from:
 ${func_call_line_num}: ${func_call_file}
@@ -123,6 +128,6 @@ ${divider}
 Usage info:
 
 ${function_usage}
-${wrapper}
+${wrapper_end}
 END_OF_VARIABLE_WITH_EVAL
 }
