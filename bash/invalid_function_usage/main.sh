@@ -65,6 +65,12 @@ main()
 ### END OF MAIN ###
 ###################
 
+main_stderr_red()
+{
+    main "$@" 2> >(sed $'s|.*|\e[31m&\e[m|' >&2)
+}
+
+
 first_func()
 {
     local input="$1"
@@ -103,5 +109,5 @@ END_OF_MESSAGE
 #################
 ### Call main ###
 #################
-main "$@"
+main_stderr_red "$@"
 #################
