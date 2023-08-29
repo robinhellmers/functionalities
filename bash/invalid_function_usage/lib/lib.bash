@@ -44,6 +44,33 @@ define()
     IFS='\n' read -r -d '' ${1} || true
 }
 
+backtrace()
+{
+    # Top level function name
+    local top_level_function='main'
+
+    local line
+    local backtrace_output
+    # 1 or 0 depending if to include 'backtrace' function in call stack
+    # 0 = include 'backtrace' function
+    local i=1
+    until [[ "${FUNCNAME[$i]}" == "$top_level_function" ]]
+    do
+        line="#${i}  '${FUNCNAME[$i]}' at  ${BASH_LINENO[$i]}: ${BASH_SOURCE[i+1]}"
+
+        if [[ -z "$backtrace_output" ]]
+        then
+            # Before backtrace_output is defined
+            backtrace_output="$line"
+        else
+            printf -v backtrace_output "%s\n${line}" "$backtrace_output"
+        fi
+        ((i++))
+    done
+
+    echo "$backtrace_output"
+}
+
 get_func_def_line_num()
 {
     local func_name=$1
@@ -118,6 +145,9 @@ Called from:
 ${func_call_line_num}: ${func_call_file}
 Defined at:
 ${func_def_line_num}: ${func_def_file}
+
+Whole backtrace:
+$(backtrace)
 
 ${divider}
 Error info:
