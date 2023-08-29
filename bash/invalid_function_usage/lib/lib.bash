@@ -96,6 +96,7 @@ invalid_function_usage()
 
     # Function index 1 represents the function call before this function
     local index=1
+    local input_error_this_func='false'
     if [[ -z "$function_usage"  || -z "$error_info" ]]
     then
         # Usage error of this function
@@ -176,4 +177,6 @@ END_OF_VARIABLE_WITH_EVAL
     # will not mess with the order of 'stdout' vs 'stderr' compared to
     # redirecting to 'stderr' and then using 'sed' to color it.
     command_exists echo_stderr && echo_stderr "$output" || echo "$output" >&2
+
+    [[ "$input_error_this_func" == 'true' ]] && exit 1
 }
