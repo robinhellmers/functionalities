@@ -55,6 +55,8 @@ library_sourcing
 ############
 main()
 {
+    init
+
     first_func "Hey"
     first_func "Hay"
 
@@ -65,9 +67,25 @@ main()
 ### END OF MAIN ###
 ###################
 
-main_stderr_red()
+main_wrapper()
 {
-    main "$@" 2> >(sed $'s|.*|\e[31m&\e[m|' >&2)
+    if command_exists stderr_red && command_exists echo_stderr
+    then
+        # Color stderr using Github 'stderred'
+        # https://github.com/ku1ik/stderred
+        stderr_red main "$@"
+    elif [[ "$FORCE_STDERR_RED" == 'true' ]]
+    then
+        # This can mess with the order of 'stdout' vs 'stderr'
+        main "$@" 2> >(sed $'s|.*|\e[31m&\e[m|' >&2)
+    else
+        main "$@"
+    fi
+}
+
+init()
+{
+    readonly FORCE_STDERR_RED='true'
 }
 
 
@@ -109,5 +127,5 @@ END_OF_MESSAGE
 #################
 ### Call main ###
 #################
-main_stderr_red "$@"
+main_wrapper "$@"
 #################

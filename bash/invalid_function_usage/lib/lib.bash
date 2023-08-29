@@ -84,6 +84,11 @@ get_func_def_line_num()
     grep -n "^[\s]*${func_name}()" $script_file | cut -d: -f1
 }
 
+command_exists()
+{
+    type "$1" >/dev/null 2>&1
+}
+
 invalid_function_usage()
 {
     local function_usage="$1"
@@ -137,7 +142,8 @@ END_OF_VARIABLE_WITHOUT_EVAL
     # Remove potential last whitespace line
     function_usage=$(sed '${/^[[:space:]]*$/d;}' <<< ${function_usage})
 
-    cat >&2 <<END_OF_VARIABLE_WITH_EVAL
+    local output_message
+    define output_message <<END_OF_VARIABLE_WITH_EVAL
 
 ${wrapper_start} !! Invalid usage of ${func_name}()
 
@@ -160,4 +166,14 @@ Usage info:
 ${function_usage}
 ${wrapper_end}
 END_OF_VARIABLE_WITH_EVAL
+
+    # 'echo_stderr' writes directly to 'stderr' compared to
+    # 'echo >&2' which writes to 'stdout' and then redirects to 'stderr'.
+    # As the Github project 'stderred'
+    #     https://github.com/ku1ik/stderred
+    # only colorizes text which is written to 'stderr' directly, it needs
+    # 'echo_stderr' to work properly. 'stderred' coloring is preferred as that
+    # will not mess with the order of 'stdout' vs 'stderr' compared to
+    # redirecting to 'stderr' and then using 'sed' to color it.
+    command_exists echo_stderr && echo_stderr "$output" || echo "$output" >&2
 }
