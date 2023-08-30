@@ -55,8 +55,6 @@ library_sourcing
 ############
 main()
 {
-    init
-
     first_func "Hey"
     first_func "Hay"
 
@@ -81,11 +79,6 @@ main_wrapper()
     else
         main "$@"
     fi
-}
-
-init()
-{
-    readonly FORCE_STDERR_RED='true'
 }
 
 
