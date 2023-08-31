@@ -143,8 +143,8 @@ END_OF_VARIABLE_WITHOUT_EVAL
     # Remove potential last whitespace line
     function_usage=$(sed '${/^[[:space:]]*$/d;}' <<< ${function_usage})
 
-    local output_message
-    define output_message <<END_OF_VARIABLE_WITH_EVAL
+    local output
+    define output <<END_OF_VARIABLE_WITH_EVAL
 
 ${wrapper_start} !! Invalid usage of ${func_name}()
 
