@@ -46,8 +46,47 @@ define()
 
 backtrace()
 {
+    # 1 or 0 depending if to include 'backtrace' function in call stack
+    # 0 = include 'backtrace' function
+    local callstack_level=1
     # Top level function name
     local top_level_function='main'
+
+    ### Find max lengths of parts in order to later find whitespacing needed
+    #
+    local iter_part
+    local func_name_part
+    local line_num_part
+    local file_part
+    local iter_len
+    local func_name_len
+    local line_num_len
+    local i=$callstack_level
+    local iter_maxlen=0
+    local func_name_maxlen=0
+    local line_num_maxlen=0
+    until [[ "${FUNCNAME[$i]}" == "$top_level_function" ]]
+    do
+
+        iter_part="#${i}  "
+        func_name_part="'${FUNCNAME[$i]}' "
+        line_num_part="  ${BASH_LINENO[$i]}:"
+        file_part=" ${BASH_SOURCE[i+1]}"
+
+        iter_len=$(wc -m <<< "$iter_part")
+        ((iter_len--))
+        func_name_len=$(wc -m <<< "$func_name_part")
+        ((func_name_len--))
+        line_num_len=$(wc -m <<< "$line_num_part")
+        ((line_num_len--))
+
+
+        ((iter_len > iter_maxlen)) && iter_maxlen=$iter_len
+        ((func_name_len > func_name_maxlen)) && func_name_maxlen=$func_name_len
+        ((line_num_len > line_num_maxlen)) && line_num_maxlen=$line_num_len
+
+        ((i++))
+    done
 
     local line
     local backtrace_output
@@ -56,7 +95,12 @@ backtrace()
     local i=1
     until [[ "${FUNCNAME[$i]}" == "$top_level_function" ]]
     do
-        line="#${i}  '${FUNCNAME[$i]}' at  ${BASH_LINENO[$i]}: ${BASH_SOURCE[i+1]}"
+        iter_part="#${i}  "
+        func_name_part="'${FUNCNAME[$i]}' "
+        line_num_part="  ${BASH_LINENO[$i]}:"
+        file_part=" ${BASH_SOURCE[i+1]}"
+
+        line="${iter_part}${func_name_part}at${line_num_part}${file_part}"
 
         if [[ -z "$backtrace_output" ]]
         then
