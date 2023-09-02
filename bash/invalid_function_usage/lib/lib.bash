@@ -88,6 +88,8 @@ backtrace()
         ((i++))
     done
 
+    local diff_len
+    local extra_whitespace
     local line
     local backtrace_output
     # 1 or 0 depending if to include 'backtrace' function in call stack
@@ -99,6 +101,39 @@ backtrace()
         func_name_part="'${FUNCNAME[$i]}' "
         line_num_part="  ${BASH_LINENO[$i]}:"
         file_part=" ${BASH_SOURCE[i+1]}"
+
+        iter_len=$(wc -m <<< "$iter_part")
+        ((iter_len--))
+
+        # Check if to add extra whitespace after 'iter_part'
+        if ((iter_len < iter_maxlen))
+        then
+            diff_len=$((iter_maxlen - iter_len))
+            extra_whitespace="$(printf "%.s " $(seq $diff_len))"
+            iter_part="${iter_part}${extra_whitespace}"
+        fi
+
+        func_name_len=$(wc -m <<< "$func_name_part")
+        ((func_name_len--))
+
+        # Check if to add extra whitespace after 'func_name_part'
+        if ((func_name_len < func_name_maxlen))
+        then
+            diff_len=$((func_name_maxlen - func_name_len))
+            extra_whitespace="$(printf "%.s " $(seq $diff_len))"
+            func_name_part="${func_name_part}${extra_whitespace}"
+        fi
+
+        line_num_len=$(wc -m <<< "$line_num_part")
+        ((line_num_len--))
+
+        # Check if to add extra whitespace before 'line_num_part'
+        if ((line_num_len < line_num_maxlen))
+        then
+            diff_len=$((line_num_maxlen - line_num_len))
+            extra_whitespace="$(printf "%.s " $(seq $diff_len))"
+            line_num_part="${extra_whitespace}${line_num_part}"
+        fi
 
         line="${iter_part}${func_name_part}at${line_num_part}${file_part}"
 

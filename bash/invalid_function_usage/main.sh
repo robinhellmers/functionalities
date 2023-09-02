@@ -93,9 +93,65 @@ second_func()
 {
     local input="$1"
 
+    third_func "$input"
+}
+
+third_func()
+{
+    local input="$1"
+
+    fourth_func "$input"
+}
+
+fourth_func()
+{
+    local input="$1"
+
+    sixth_func "$input"
+}
+
+sixth_func()
+{
+    local input="$1"
+
+    seventh_func "$input"
+}
+
+seventh_func()
+{
+    local input="$1"
+
+    eigth_func "$input"
+}
+
+eigth_func()
+{
+    local input="$1"
+
+    nineth_func "$input"
+}
+
+nineth_func()
+{
+    local input="$1"
+
+    tenth_func "$input"
+}
+
+tenth_func()
+{
+    local input="$1"
+
+    eleventh_func "$input"
+}
+
+eleventh_func()
+{
+    local input="$1"
+
     local function_usage
     define function_usage <<'END_OF_MESSAGE'
-Usage: second_func <phrase>
+Usage: eleventh_func <phrase>
     <phrase>:
         - 'Hi'
         - 'Hey'
@@ -116,6 +172,7 @@ END_OF_MESSAGE
                                "Invalid input phrase: '$input'"
     fi
 }
+
 
 #################
 ### Call main ###
