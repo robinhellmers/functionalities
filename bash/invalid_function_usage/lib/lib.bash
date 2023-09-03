@@ -52,6 +52,24 @@ backtrace()
     # Top level function name
     local top_level_function='main'
 
+    local iter_part_template
+    local func_name_part_template
+    local line_num_part_template
+    local file_part_template
+
+    define iter_part_template <<'EOM'
+iter_part="#${i}  "
+EOM
+    define func_name_part_template <<'EOM'
+func_name_part="'${FUNCNAME[$i]}' "
+EOM
+    define line_num_part_template <<'EOM'
+line_num_part="  ${BASH_LINENO[$i]}:"
+EOM
+    define file_part_template <<'EOM'
+file_part=" ${BASH_SOURCE[i+1]}"
+EOM
+
     ### Find max lengths of parts in order to later find whitespacing needed
     #
     local iter_part
@@ -67,11 +85,10 @@ backtrace()
     local line_num_maxlen=0
     until [[ "${FUNCNAME[$i]}" == "$top_level_function" ]]
     do
-
-        iter_part="#${i}  "
-        func_name_part="'${FUNCNAME[$i]}' "
-        line_num_part="  ${BASH_LINENO[$i]}:"
-        file_part=" ${BASH_SOURCE[i+1]}"
+        eval "$iter_part_template"
+        eval "$func_name_part_template"
+        eval "$line_num_part_template"
+        eval "$file_part_template"
 
         iter_len=$(wc -m <<< "$iter_part")
         ((iter_len--))
@@ -97,10 +114,10 @@ backtrace()
     local i=1
     until [[ "${FUNCNAME[$i]}" == "$top_level_function" ]]
     do
-        iter_part="#${i}  "
-        func_name_part="'${FUNCNAME[$i]}' "
-        line_num_part="  ${BASH_LINENO[$i]}:"
-        file_part=" ${BASH_SOURCE[i+1]}"
+        eval "$iter_part_template"
+        eval "$func_name_part_template"
+        eval "$line_num_part_template"
+        eval "$file_part_template"
 
         iter_len=$(wc -m <<< "$iter_part")
         ((iter_len--))
