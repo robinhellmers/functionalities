@@ -105,6 +105,8 @@ EOM
         ((i++))
     done
 
+    ### Construct lines with good whitespacing using max lengths
+    #
     local diff_len
     local extra_whitespace
     local line
