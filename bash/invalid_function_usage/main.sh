@@ -55,8 +55,13 @@ library_sourcing
 ############
 main()
 {
+    local arg='Hey'
+    echo -e "\nLets call first_func() with valid argument: '$arg'"
     first_func "Hey"
-    first_func "Hay"
+
+    arg='Hay'
+    echo -e "\nLets call first_func() with invalid argument: '$arg'"
+    first_func "$arg"
 
     echo -e "\nLets call invalid_function_usage() with invalid arguments."
     invalid_function_usage 'asd'
@@ -166,7 +171,8 @@ END_OF_MESSAGE
 
     if [[ "$is_valid" == 'true' ]]
     then
-        echo "$input"
+        echo
+        echo "You said '$input'"
     else
         invalid_function_usage "$function_usage" \
                                "Invalid input phrase: '$input'"
