@@ -55,16 +55,22 @@ library_sourcing
 ############
 main()
 {
-    local arg='Hey'
-    echo -e "\nLets call first_func() with valid argument: '$arg'"
-    first_func "Hey"
+    local phrase
 
-    arg='Hay'
-    echo -e "\nLets call first_func() with invalid argument: '$arg'"
-    first_func "$arg"
+    phrase='Whatsup'
+    echo -e "\nTry to welcome 1st group of people with '$phrase'"
+    welcome_people 1 0 "$phrase"
 
-    echo -e "\nLets call invalid_function_usage() with invalid arguments."
-    invalid_function_usage 'asd'
+    phrase='Hello'
+    echo -e "\nTry to welcome 2nd group of people with '$phrase'"
+    welcome_people 1 1 "$phrase"
+
+    phrase='Whatsup'
+    echo -e "\nTry to welcome 3rd group of people with '$phrase'"
+    welcome_people 1 1 "$phrase"
+
+    echo -e "\nUse invalid argument for invalid_function_usage():"
+    invalid_function_usage asd
 }
 ###################
 ### END OF MAIN ###
@@ -86,99 +92,76 @@ main_wrapper()
     fi
 }
 
-
-first_func()
+# No checks in welcome_people()
+welcome_people()
 {
-    local input="$1"
+    local num_friends=$1
+    local num_colleagues=$2
+    local phrase="$3"
 
-    second_func "$input"
-}
+    echo "Group of people:"
+    echo "    $num_friends friends"
+    echo "    $num_colleagues colleagues"
+    echo
 
-second_func()
-{
-    local input="$1"
-
-    third_func "$input"
-}
-
-third_func()
-{
-    local input="$1"
-
-    fourth_func "$input"
-}
-
-fourth_func()
-{
-    local input="$1"
-
-    sixth_func "$input"
-}
-
-sixth_func()
-{
-    local input="$1"
-
-    seventh_func "$input"
-}
-
-seventh_func()
-{
-    local input="$1"
-
-    eigth_func "$input"
-}
-
-eigth_func()
-{
-    local input="$1"
-
-    nineth_func "$input"
-}
-
-nineth_func()
-{
-    local input="$1"
-
-    tenth_func "$input"
-}
-
-tenth_func()
-{
-    local input="$1"
-
-    eleventh_func "$input"
-}
-
-eleventh_func()
-{
-    local input="$1"
-
-    local function_usage
-    define function_usage <<'END_OF_MESSAGE'
-Usage: eleventh_func <phrase>
-    <phrase>:
-        - 'Hi'
-        - 'Hey'
-END_OF_MESSAGE
-
-    local valid_inputs=('Hi' 'Hey')
-    local is_valid='false'
-    for valid_input in "${valid_inputs[@]}"
+    for ((i=0; i < num_friends; i++))
     do
-        [[ "$input" == "$valid_input" ]] && is_valid='true'
+        welcome_friend "$phrase"
     done
 
-    if [[ "$is_valid" == 'true' ]]
-    then
-        echo
-        echo "You said '$input'"
-    else
-        invalid_function_usage "$function_usage" \
-                               "Invalid input phrase: '$input'"
-    fi
+    for ((i=0; i < num_colleagues; i++))
+    do
+        welcome_colleague "$phrase"
+    done
 }
 
+welcome_friend()
+{
+    local friendly_phrase="$1"
+
+    define function_usage <<'END_OF_FUNC_USAGE'
+Usage: first_func <friendly_phrase>
+    <friendly_phrase>:
+        - A phrase for welcoming a friend
+            * 'Hello'
+            * 'Hey'
+            * 'Whatsup'
+END_OF_FUNC_USAGE
+
+    case "$friendly_phrase" in
+        'Hello'|'Hey'|'Whatsup')
+            ;;
+        *)
+            invalid_function_usage "$function_usage" "Invalid friendly phrase: '$friendly_phrase'"
+            ;;
+    esac
+
+    echo "You welcomed a friend with '$friendly_phrase'."
+}
+
+
+welcome_colleague()
+{
+    local professional_phrase="$1"
+
+    define function_usage <<'END_OF_FUNC_USAGE'
+Usage: welcome_colleague <professional_phrase>
+    <professional_phrase>:
+        - A phrase for welcoming a colleague
+            * 'Hello'
+            * 'Hi'
+END_OF_FUNC_USAGE
+
+    case "$professional_phrase" in
+        'Hello'|'Hi')
+            ;;
+        *)
+            invalid_function_usage "$function_usage" "Invalid professional phrase: '$professional_phrase'"
+            ;;
+    esac
+
+    echo "You welcomed a colleague with '$professional_phrase'."
+}
 
 #################
 ### Call main ###
