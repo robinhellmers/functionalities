@@ -1,3 +1,6 @@
 [submodule "bash/find_path/lib/lib_sources/bash-lib-core"]
 	path = bash/find_path/lib/lib_sources/bash-lib-core
 	url = git@github.com:robinhellmers/bash-lib-core.git
+[submodule "bash/template"]
+	path = bash/template
+	url = git@github.com:robinhellmers/bash-template.git
